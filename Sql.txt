@@ -1,0 +1,184 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.31 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database lab1;
+Query OK, 1 row affected (0.06 sec)
+
+mysql> use lab1;
+Database changed
+mysql>  create table product (
+    -> p_id int not null,
+    -> p_name varchar(30) not null,
+    ->  p_quantity int not null,
+    ->  primary key (p_id));
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> create table employee(
+    -> e_id int not null,e_name varchar(30) not null,
+    -> address varchar(30) not null,
+    -> primary key (e_id));
+Query OK, 0 rows affected (0.50 sec)
+
+mysql> desc product;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| p_id       | int         | NO   | PRI | NULL    |       |
+| p_name     | varchar(30) | NO   |     | NULL    |       |
+| p_quantity | int         | NO   |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc employee;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| e_id    | int         | NO   | PRI | NULL    |       |
+| e_name  | varchar(30) | NO   |     | NULL    |       |
+| address | varchar(30) | NO   |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into product (p_id,p_name,p_quantity)values(1,'Smart watch',2);
+Query OK, 1 row affected (0.07 sec)
+
+mysql>  insert into product (p_id,p_name,p_quantity)values(2, 'Phone', 3);
+Query OK, 1 row affected (0.05 sec)
+
+mysql>  insert into product (p_id,p_name,p_quantity)values(3, ' laptop',1);
+Query OK, 1 row affected (0.07 sec)
+
+mysql>  insert into product (p_id,p_name,p_quantity)values(4, 'Earbuds ',2);
+Query OK, 1 row affected (0.08 sec)
+
+mysql>  insert into product (p_id,p_name,p_quantity)values(5,'Frdge',1);
+Query OK, 1 row affected (0.07 sec)
+
+mysql>  insert into employee (e_id,e_name,address)values(1,'Farwa','Kalyan');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> ^C
+mysql>  insert into employee (e_id,e_name,address)values(2,'Javed','pune');
+Query OK, 1 row affected (0.07 sec)
+
+mysql>  insert into employee (e_id,e_name,address)values(3, 'Zeba','mumbai');
+Query OK, 1 row affected (0.07 sec)
+
+mysql>  insert into employee (e_id,e_name,address)values(4,'Waniya','Banglore');
+Query OK, 1 row affected (0.07 sec)
+
+mysql>  insert into employee (e_id,e_name,address)values(5,'Kainat','UAE');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from product;
++------+-------------+------------+
+| p_id | p_name      | p_quantity |
++------+-------------+------------+
+|    1 | Smart watch |          2 |
+|    2 | Phone       |          3 |
+|    3 |  laptop     |          1 |
+|    4 | Earbuds     |          2 |
+|    5 | Frdge       |          1 |
++------+-------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from employee;
++------+--------+----------+
+| e_id | e_name | address  |
++------+--------+----------+
+|    1 | Farwa  | Kalyan   |
+|    2 | Javed  | pune     |
+|    3 | Zeba   | mumbai   |
+|    4 | Waniya | Banglore |
+|    5 | Kainat | UAE      |
++------+--------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select product.p_name,product.p_quantity,employee.e_name,employee.address
+    -> from product
+    -> INNER JOIN employee
+    -> ON product.p_id=employee.e_id;
++-------------+------------+--------+----------+
+| p_name      | p_quantity | e_name | address  |
++-------------+------------+--------+----------+
+| Smart watch |          2 | Farwa  | Kalyan   |
+| Phone       |          3 | Javed  | pune     |
+|  laptop     |          1 | Zeba   | mumbai   |
+| Earbuds     |          2 | Waniya | Banglore |
+| Frdge       |          1 | Kainat | UAE      |
++-------------+------------+--------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select product.p_name,employee.e_name
+    -> from product
+    -> LEFT JOIN employee
+    -> ON product.p_id=employee.e_id;
++-------------+--------+
+| p_name      | e_name |
++-------------+--------+
+| Smart watch | Farwa  |
+| Phone       | Javed  |
+|  laptop     | Zeba   |
+| Earbuds     | Waniya |
+| Frdge       | Kainat |
++-------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select product.p_quantity,employee.address
+    -> from product
+    -> RIGHT JOIN employee
+    -> ON product.p_id=employee.e_id;
++------------+----------+
+| p_quantity | address  |
++------------+----------+
+|          2 | Kalyan   |
+|          3 | pune     |
+|          1 | mumbai   |
+|          2 | Banglore |
+|          1 | UAE      |
++------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from product full join employee;
++------+-------------+------------+------+--------+----------+
+| p_id | p_name      | p_quantity | e_id | e_name | address  |
++------+-------------+------------+------+--------+----------+
+|    5 | Frdge       |          1 |    1 | Farwa  | Kalyan   |
+|    4 | Earbuds     |          2 |    1 | Farwa  | Kalyan   |
+|    3 |  laptop     |          1 |    1 | Farwa  | Kalyan   |
+|    2 | Phone       |          3 |    1 | Farwa  | Kalyan   |
+|    1 | Smart watch |          2 |    1 | Farwa  | Kalyan   |
+|    5 | Frdge       |          1 |    2 | Javed  | pune     |
+|    4 | Earbuds     |          2 |    2 | Javed  | pune     |
+|    3 |  laptop     |          1 |    2 | Javed  | pune     |
+|    2 | Phone       |          3 |    2 | Javed  | pune     |
+|    1 | Smart watch |          2 |    2 | Javed  | pune     |
+|    5 | Frdge       |          1 |    3 | Zeba   | mumbai   |
+|    4 | Earbuds     |          2 |    3 | Zeba   | mumbai   |
+|    3 |  laptop     |          1 |    3 | Zeba   | mumbai   |
+|    2 | Phone       |          3 |    3 | Zeba   | mumbai   |
+|    1 | Smart watch |          2 |    3 | Zeba   | mumbai   |
+|    5 | Frdge       |          1 |    4 | Waniya | Banglore |
+|    4 | Earbuds     |          2 |    4 | Waniya | Banglore |
+|    3 |  laptop     |          1 |    4 | Waniya | Banglore |
+|    2 | Phone       |          3 |    4 | Waniya | Banglore |
+|    1 | Smart watch |          2 |    4 | Waniya | Banglore |
+|    5 | Frdge       |          1 |    5 | Kainat | UAE      |
+|    4 | Earbuds     |          2 |    5 | Kainat | UAE      |
+|    3 |  laptop     |          1 |    5 | Kainat | UAE      |
+|    2 | Phone       |          3 |    5 | Kainat | UAE      |
+|    1 | Smart watch |          2 |    5 | Kainat | UAE      |
++------+-------------+------------+------+--------+----------+
+25 rows in set (0.00 sec)
+
+mysql>
